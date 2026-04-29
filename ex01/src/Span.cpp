@@ -6,7 +6,7 @@
 /*   By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 14:35:45 by komorebi          #+#    #+#             */
-/*   Updated: 2026/04/29 17:29:16 by komorebi         ###   ########.fr       */
+/*   Updated: 2026/04/29 17:45:40 by komorebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ unsigned int Span::shortestSpan()
     res = *(it + 1) - *it;
     it++;
 
-    while (it != sortedChest.end())
+    while ((it + 1) != sortedChest.end())
     {
         if (*(it + 1) - *it < res)
             res = *(it + 1) - *it;
