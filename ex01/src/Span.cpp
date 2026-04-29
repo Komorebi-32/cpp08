@@ -6,7 +6,7 @@
 /*   By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 14:35:45 by komorebi          #+#    #+#             */
-/*   Updated: 2026/04/29 17:45:40 by komorebi         ###   ########.fr       */
+/*   Updated: 2026/04/29 17:57:27 by komorebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,3 +100,13 @@ unsigned int Span::shortestSpan()
     }
     return (res);
 }
+
+// use this: template <class InputIterator>    void insert (iterator position, InputIterator first, InputIterator last);
+//what the fuck is an input iterator ??
+//need to add the correct parameters to this function (params of insert() ?)
+//need to check that the number of elements to add is not too large for the vector
+void Span::addMultipleNumbers()
+{
+
+}
+
