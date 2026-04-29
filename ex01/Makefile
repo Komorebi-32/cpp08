@@ -6,7 +6,7 @@
 #    By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/16 14:08:56 by bkaras-g          #+#    #+#              #
-#    Updated: 2026/04/29 14:37:26 by komorebi         ###   ########.fr        #
+#    Updated: 2026/04/29 16:46:46 by komorebi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,7 @@ NAME = spanThatShit
 SRC_FILES = main.cpp \
 			Span.cpp
 
-HEADERS_FILES = easyfind.hpp \
-			Span.hpp
+HEADERS_FILES = Span.hpp
 
 OBJ_DIR = obj
 SRC_DIR = src

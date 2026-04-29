@@ -6,11 +6,14 @@
 /*   By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 14:35:45 by komorebi          #+#    #+#             */
-/*   Updated: 2026/04/29 16:36:10 by komorebi         ###   ########.fr       */
+/*   Updated: 2026/04/29 17:29:16 by komorebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Span.hpp"
+
+#define GREY "\033[90m"
+#define RESET "\033[0m"
 
 /*
 default-initializing the vector here. Explicitly written to improve readability,
@@ -18,30 +21,30 @@ but still optional to write it.
 */
 Span::Span(void) : _treasureChest(), _capacity(0)
 {
-    std::cout << "Span default constructor called" << std::endl;
+    std::cout << GREY << "Span default constructor called" << RESET << std::endl;
 }
 
 Span::Span(unsigned int N)
 {
-    std::cout << "Span parameterized constructor called" << std::endl;
+    std::cout << GREY << "Span parameterized constructor called" << RESET << std::endl;
     this->_treasureChest.reserve(N);
     this->_capacity = N;
 }
 
 Span::Span(const Span &copy)
 {
-    std::cout << "Span copy constructor called" << std::endl;
+    std::cout << GREY << "Span copy constructor called" << RESET << std::endl;
     *this = copy;
 }
 
 Span::~Span(void)
 {
-    std::cout << "Span destructor called" << std::endl;
+    std::cout << GREY << "Span destructor called" << RESET << std::endl;
 }
 
 Span &Span::operator=(const Span &copy)
 {
-    std::cout << "Span assignment operator called" << std::endl;
+    std::cout << GREY << "Span assignment operator called" << RESET << std::endl;
     if (this != &copy)
     {
         // copy data members here
@@ -80,7 +83,7 @@ unsigned int Span::shortestSpan()
 
     std::vector<int> sortedChest;
     std::vector<int>::iterator it;
-    unsigned int res;
+    int res;
 
     sortedChest = this->_treasureChest;
     it = sortedChest.begin();
@@ -95,4 +98,5 @@ unsigned int Span::shortestSpan()
             res = *(it + 1) - *it;
         it++;
     }
+    return (res);
 }
