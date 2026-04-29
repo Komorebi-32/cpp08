@@ -1,0 +1,56 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2025/07/16 14:08:56 by bkaras-g          #+#    #+#              #
+#    Updated: 2026/04/29 14:37:26 by komorebi         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+.SILENT:
+
+NAME = spanThatShit
+
+SRC_FILES = main.cpp \
+			Span.cpp
+
+HEADERS_FILES = easyfind.hpp \
+			Span.hpp
+
+OBJ_DIR = obj
+SRC_DIR = src
+INC_DIR = inc
+
+SRC = $(addprefix $(SRC_DIR)/, $(SRC_FILES))
+HEADERS = $(addprefix $(INC_DIR)/, $(HEADERS_FILES))
+OBJ = $(addprefix $(OBJ_DIR)/, $(patsubst %.cpp, %.o, $(SRC_FILES))) 
+
+CXX = c++
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98 -g
+RM = rm -rf
+
+all: $(NAME)
+
+$(NAME): $(OBJ_DIR) $(OBJ) $(HEADERS) Makefile
+	@$(CXX) $(CXXFLAGS) $(OBJ) -o $(NAME)
+	@echo  "Mandatory part compilation ok"
+
+$(OBJ_DIR):
+	@mkdir -p $(OBJ_DIR)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp $(HEADERS)
+	@$(CXX) $(CXXFLAGS) -I $(INC_DIR) -c $< -o $@
+
+clean:
+	@$(RM) $(OBJ_DIR)
+	@echo  "Clean done"
+
+fclean: clean
+	@$(RM) $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re
