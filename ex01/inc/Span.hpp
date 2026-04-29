@@ -6,7 +6,7 @@
 /*   By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 14:34:59 by komorebi          #+#    #+#             */
-/*   Updated: 2026/04/29 15:58:38 by komorebi         ###   ########.fr       */
+/*   Updated: 2026/04/29 16:22:16 by komorebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 
 #include <string>
 #include <vector>
-
+#include <iostream>
+#include <algorithm>
 
 class Span {
 public:
