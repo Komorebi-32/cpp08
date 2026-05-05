@@ -6,7 +6,7 @@
 /*   By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 16:28:30 by komorebi          #+#    #+#             */
-/*   Updated: 2026/05/05 16:46:51 by komorebi         ###   ########.fr       */
+/*   Updated: 2026/05/05 16:58:11 by komorebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,19 @@ public:
     };
 
     // ---------- Getter and Setter Methods ------------
+    typedef std::stack<T>::container_type::iterator iterator;
+
+    iterator begin()
+    {
+        return (this->c.begin());
+    }
+
+    iterator end()
+    {
+        return (this->c.end());
+    }
+
+    //protected ? reverse iterator ? 
 
     // ---------- Member Methods -----------------------
 
