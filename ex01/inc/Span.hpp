@@ -6,7 +6,7 @@
 /*   By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 14:34:59 by komorebi          #+#    #+#             */
-/*   Updated: 2026/05/05 13:54:09 by komorebi         ###   ########.fr       */
+/*   Updated: 2026/05/05 14:15:31 by komorebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,12 @@ public:
     Span& operator=(const Span& copy);
 
     // ---------- Getter and Setter Methods ------------
+
+    //non-const getters: for writable Span objects
     std::vector<int>::iterator begin(void);
     std::vector<int>::iterator end(void);
+
+    //const getters: for read-only Span objects
     std::vector<int>::const_iterator begin(void) const;
     std::vector<int>::const_iterator end(void) const;
 
