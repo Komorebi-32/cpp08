@@ -6,7 +6,7 @@
 /*   By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 14:35:45 by komorebi          #+#    #+#             */
-/*   Updated: 2026/05/04 17:04:23 by komorebi         ###   ########.fr       */
+/*   Updated: 2026/05/05 13:50:53 by komorebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,26 @@ Span::Span(const Span &copy)
 Span::~Span(void)
 {
     std::cout << GREY << "Span destructor called" << RESET << std::endl;
+}
+
+std::vector<int>::iterator Span::begin(void)
+{
+    return (this->_treasureChest.begin());
+}
+
+std::vector<int>::iterator Span::end(void)
+{
+    return (this->_treasureChest.end());
+}
+
+std::vector<int>::const_iterator Span::begin(void) const
+{
+    return (this->_treasureChest.begin());
+}
+
+std::vector<int>::const_iterator Span::end(void) const
+{
+    return (this->_treasureChest.end());
 }
 
 Span &Span::operator=(const Span &copy)

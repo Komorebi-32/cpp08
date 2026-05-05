@@ -6,7 +6,7 @@
 /*   By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 14:34:59 by komorebi          #+#    #+#             */
-/*   Updated: 2026/05/04 17:35:47 by komorebi         ###   ########.fr       */
+/*   Updated: 2026/05/05 13:54:09 by komorebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,21 @@ public:
     Span& operator=(const Span& copy);
 
     // ---------- Getter and Setter Methods ------------
+    std::vector<int>::iterator begin(void);
+    std::vector<int>::iterator end(void);
+    std::vector<int>::const_iterator begin(void) const;
+    std::vector<int>::const_iterator end(void) const;
 
     // ---------- Member Methods -----------------------
     void addNumber(int num);
     unsigned int shortestSpan();
     unsigned int longestSpan();
 
-    // use this: template <class InputIterator>    void insert (iterator position, InputIterator first, InputIterator last);
-//what the fuck is an input iterator ??
-//need to add the correct parameters to this function (params of insert() ?)
-//need to check that the number of elements to add is not too large for the vector
+    /*
+    * Inserts a range of elements from the input iterator `first` to the input iterator `last`, before
+    * the element pointed to by `position` in Span. 
+    * Throws exception if the `position` is out of bounds or if the Span does not have enough space.  
+    */
     template <typename InputIterator>
     void addMultipleNumbers(std::vector<int>::iterator position, InputIterator first, InputIterator last)
     {
