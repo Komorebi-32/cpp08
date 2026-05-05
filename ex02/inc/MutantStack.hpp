@@ -6,7 +6,7 @@
 /*   By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 16:28:30 by komorebi          #+#    #+#             */
-/*   Updated: 2026/05/05 16:58:11 by komorebi         ###   ########.fr       */
+/*   Updated: 2026/05/05 17:24:40 by komorebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ public:
 
     // ---------- Getter and Setter Methods ------------
     typedef std::stack<T>::container_type::iterator iterator;
+    typedef std::stack<T>::container_type::const_iterator const_iterator;
+    typedef std::stack<T>::container_type::reverse_iterator reverse_iterator;
+    typedef std::stack<T>::container_type::const_reverse_iterator const_reverse_iterator;
 
     iterator begin()
     {
@@ -49,8 +52,36 @@ public:
     {
         return (this->c.end());
     }
+    
+    const_iterator begin() const
+    {
+        return (this->c.begin());
+    }
 
-    //protected ? reverse iterator ? 
+    const_iterator end() const
+    {
+        return (this->c.end());
+    }
+
+    reverse_iterator rbegin()
+    {
+        return (this->c.rbegin());
+    }
+
+    reverse_iterator rend()
+    {
+        return (this->c.rend());
+    }
+
+    const_reverse_iterator rbegin() const
+    {
+        return (this->c.rbegin());
+    }
+
+    const_reverse_iterator rend() const
+    {
+        return (this->c.rend());
+    }
 
     // ---------- Member Methods -----------------------
 
