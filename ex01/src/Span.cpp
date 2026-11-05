@@ -6,7 +6,7 @@
 /*   By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 14:35:45 by komorebi          #+#    #+#             */
-/*   Updated: 2026/11/05 17:37:06 by komorebi         ###   ########.fr       */
+/*   Updated: 2026/11/05 17:53:59 by komorebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ Span &Span::operator=(const Span &copy)
     std::cout << GREY << "Span assignment operator called" << RESET << std::endl;
     if (this != &copy)
     {
-        // copy data members here
+        this->_treasureChest = copy._treasureChest;
+        this->_capacity = copy._capacity;
     }
     return (*this);
 }
