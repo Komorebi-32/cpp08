@@ -6,12 +6,13 @@
 /*   By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 14:36:01 by komorebi          #+#    #+#             */
-/*   Updated: 2026/05/05 14:11:54 by komorebi         ###   ########.fr       */
+/*   Updated: 2026/11/05 17:49:14 by komorebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Span.hpp"
 #include <sstream>
+#include <vector>
 
 #define GREY "\033[90m"
 #define GREEN "\033[92m"
@@ -254,6 +255,27 @@ int main(void)
 		expectThrowAddMultipleNumbers(tight, "tight span", tight.end(), overflow, overflow + 3);
 		expectEq("tight longest after failed insert", tight.longestSpan(), 4);
 		expectEq("tight shortest after failed insert", tight.shortestSpan(), 4);
+	}
+
+	printHeader("32,000 numbers: bulk insertion and span calculations");
+	{
+		const int numberCount = 32000;
+		Span large(numberCount);
+		std::vector<int> values;
+		int i;
+
+		values.reserve(numberCount);
+		/*
+		bulk-inserts 32,000 unsorted values and checks the expected longest span (31,999) and shortest span (1)
+		Each value is (i * 7919) % numberCount, so every result is in the range 0 to 31,999. 
+		Since 7,919 and 32,000 have no common factor greater than 1, this produces each value
+		in that range exactly once, but in a scrambled order.
+		*/
+		for (i = 0; i < numberCount; ++i)
+			values.push_back((i * 7919) % numberCount);
+		large.addMultipleNumbers(large.begin(), values.begin(), values.end());
+		expectEq("large longest", large.longestSpan(), numberCount - 1);
+		expectEq("large shortest", large.shortestSpan(), 1);
 	}
 
 	std::cout << "\n" << BOLD << CYAN << "================ SUMMARY ================" << RESET << std::endl;
