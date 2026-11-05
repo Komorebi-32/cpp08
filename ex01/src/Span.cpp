@@ -6,7 +6,7 @@
 /*   By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 14:35:45 by komorebi          #+#    #+#             */
-/*   Updated: 2026/05/05 13:50:53 by komorebi         ###   ########.fr       */
+/*   Updated: 2026/11/05 17:37:06 by komorebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,16 @@ unsigned int Span::longestSpan()
     return (*std::max_element(_treasureChest.begin(), _treasureChest.end()) - *std::min_element(_treasureChest.begin(), _treasureChest.end()));
 }
 
+/*
+Possible to use std::adjacent_difference (from <numeric>) to compute the gaps, 
+then std::min_element (from <algorithm>) to find the smallest one.
+
+But it won’t be faster than the loop implemented. 
+Sorting is the expensive part; both approaches then take O(n), 
+and adjacent_difference needs extra storage. The implemented adjacent-pair scan
+is already the simpler, more efficient choice. 
+std::adjacent_find won’t help — it finds equal neighboring values, not the smallest gap.
+*/
 unsigned int Span::shortestSpan()
 {
     if (_treasureChest.size() <= 1)
