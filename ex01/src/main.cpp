@@ -98,7 +98,7 @@ void printSpanContent(const Span &span)
 	std::cout << std::endl;
 }
 
-void expectThrowAddMultipleNumbers(Span &span, const std::string &name, std::vector<int>::iterator position, int *first, int *last)
+void expectThrowAddMultipleNumbers(Span &span, const std::string &name, std::vector<int>::size_type position, int *first, int *last)
 {
 	try
 	{
@@ -197,7 +197,7 @@ int main(void)
 		Span bulk(6);
 		int values[] = {12, 4, 19};
 
-		bulk.addMultipleNumbers(bulk.begin(), values, values + 3);
+		bulk.addMultipleNumbers(0, values, values + 3);
 		printSpanContent(bulk);
 		expectEq("bulk empty longest", bulk.longestSpan(), 15);
 		expectEq("bulk empty shortest", bulk.shortestSpan(), 7);
@@ -214,8 +214,8 @@ int main(void)
 
 		front.addNumber(30);
 		front.addNumber(40);
-		front.addMultipleNumbers(front.begin(), head, head + 3);
-		front.addMultipleNumbers(front.begin(), tail.begin(), tail.end());
+		front.addMultipleNumbers(0, head, head + 3);
+		front.addMultipleNumbers(0, tail.begin(), tail.end());
 		printSpanContent(front);
 		expectEq("front longest", front.longestSpan(), 37);
 		expectEq("front shortest", front.shortestSpan(), 4);
@@ -227,8 +227,8 @@ int main(void)
 		int seed[] = {1, 10, 20};
 		int extra[] = {4, 7};
 
-		middle.addMultipleNumbers(middle.begin(), seed, seed + 3);
-		middle.addMultipleNumbers(middle.begin() + 1, extra, extra + 2);
+		middle.addMultipleNumbers(0, seed, seed + 3);
+		middle.addMultipleNumbers(1, extra, extra + 2);
 		printSpanContent(middle);
 		expectEq("middle longest", middle.longestSpan(), 19);
 		expectEq("middle shortest", middle.shortestSpan(), 3);
@@ -240,8 +240,8 @@ int main(void)
 		int base[] = {8, 13};
 		int suffix[] = {21, 34};
 
-		endInsert.addMultipleNumbers(endInsert.begin(), base, base + 2);
-		endInsert.addMultipleNumbers(endInsert.end(), suffix, suffix + 2);
+		endInsert.addMultipleNumbers(0, base, base + 2);
+		endInsert.addMultipleNumbers(2, suffix, suffix + 2);
 		printSpanContent(endInsert);
 		expectEq("end insert longest", endInsert.longestSpan(), 26);
 		expectEq("end insert shortest", endInsert.shortestSpan(), 5);
@@ -253,11 +253,24 @@ int main(void)
 		int start[] = {2, 6};
 		int overflow[] = {9, 14, 18};
 
-		tight.addMultipleNumbers(tight.begin(), start, start + 2);
+		tight.addMultipleNumbers(0, start, start + 2);
 		printSpanContent(tight);
-		expectThrowAddMultipleNumbers(tight, "tight span", tight.end(), overflow, overflow + 3);
+		expectThrowAddMultipleNumbers(tight, "tight span", 2, overflow, overflow + 3);
 		expectEq("tight longest after failed insert", tight.longestSpan(), 4);
 		expectEq("tight shortest after failed insert", tight.shortestSpan(), 4);
+	}
+
+	printHeader("addMultipleNumbers: out-of-range position throws");
+	{
+		Span indexed(5);
+		int value[] = {7};
+
+		indexed.addNumber(2);
+		expectThrowAddMultipleNumbers(indexed, "out-of-range position",
+									  2, value, value + 1);
+		expectEq("original value after invalid position", *indexed.begin(), 2);
+		expectEq("size after invalid position",
+				 indexed.end() == indexed.begin() + 1, true);
 	}
 
 	printHeader("32,000 numbers: bulk insertion and span calculations");
@@ -276,7 +289,7 @@ int main(void)
 		*/
 		for (i = 0; i < numberCount; ++i)
 			values.push_back((i * 7919) % numberCount);
-		large.addMultipleNumbers(large.begin(), values.begin(), values.end());
+		large.addMultipleNumbers(0, values.begin(), values.end());
 		expectEq("large longest", large.longestSpan(), numberCount - 1);
 		expectEq("large shortest", large.shortestSpan(), 1);
 	}

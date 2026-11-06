@@ -18,6 +18,7 @@
 #include <iostream>
 #include <algorithm>
 #include <iterator>
+#include <stdexcept>
 
 class Span {
 public:
@@ -48,22 +49,23 @@ public:
     unsigned int longestSpan();
 
     /*
-    * Inserts a range of elements from the input iterator `first` to the input iterator `last`, before
-    * the element pointed to by `position` in Span. 
-    * Throws exception if the `position` is out of bounds or if the Span does not have enough space.  
+    * Inserts a range of elements before the element at `position`.
+    * A position equal to size() inserts at the end.
+    * Throws if the position is out of bounds or if the Span lacks capacity.
     */
     template <typename InputIterator>
-    void addMultipleNumbers(std::vector<int>::iterator position, InputIterator first, InputIterator last)
+    void addMultipleNumbers(std::vector<int>::size_type position, InputIterator first, InputIterator last)
     {
-        if (position < this->_treasureChest.begin() || position > this->_treasureChest.end())
-            throw std::runtime_error("Wrong position provided");
+        if (position > this->_treasureChest.size())
+            throw std::out_of_range("Wrong position provided");
         
         std::vector<int> temp(first, last);
 
         if (temp.size() > this->_capacity - this->_treasureChest.size())
             throw std::length_error("Span does not have enough space");
 
-        this->_treasureChest.insert(position, temp.begin(), temp.end());
+        this->_treasureChest.insert(this->_treasureChest.begin() + position,
+                                    temp.begin(), temp.end());
 
     }
 
