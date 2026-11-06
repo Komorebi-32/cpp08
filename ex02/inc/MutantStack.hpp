@@ -6,7 +6,7 @@
 /*   By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 16:28:30 by komorebi          #+#    #+#             */
-/*   Updated: 2026/05/05 17:24:40 by komorebi         ###   ########.fr       */
+/*   Updated: 2026/11/06 12:01:01 by komorebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ public:
     };
 
     // ---------- Getter and Setter Methods ------------
-    typedef std::stack<T>::container_type::iterator iterator;
-    typedef std::stack<T>::container_type::const_iterator const_iterator;
-    typedef std::stack<T>::container_type::reverse_iterator reverse_iterator;
-    typedef std::stack<T>::container_type::const_reverse_iterator const_reverse_iterator;
+    typedef typename std::stack<T>::container_type::iterator iterator;
+    typedef typename std::stack<T>::container_type::const_iterator const_iterator;
+    typedef typename std::stack<T>::container_type::reverse_iterator reverse_iterator;
+    typedef typename std::stack<T>::container_type::const_reverse_iterator const_reverse_iterator;
 
     iterator begin()
     {
