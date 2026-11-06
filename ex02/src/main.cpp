@@ -6,34 +6,90 @@
 /*   By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/05 16:29:28 by komorebi          #+#    #+#             */
-/*   Updated: 2026/11/06 12:02:27 by komorebi         ###   ########.fr       */
+/*   Updated: 2026/11/06 12:13:11 by komorebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "MutantStack.hpp"
-#include <cassert>
 #include <iostream>
 #include <list>
+#include <sstream>
 #include <stack>
+#include <string>
+
+#define GREEN "\033[92m"
+#define RED "\033[91m"
+#define CYAN "\033[96m"
+#define RESET "\033[0m"
+#define BOLD "\033[1m"
+
+static int g_passCount = 0;
+static int g_failCount = 0;
+
+template <typename T>
+std::string toString(const T& value)
+{
+    std::ostringstream stream;
+    stream << value;
+    return (stream.str());
+}
+
+std::string toString(bool value)
+{
+    return (value ? "true" : "false");
+}
+
+void printHeader(const std::string& name)
+{
+    std::cout << "\n" << BOLD << CYAN << "[TEST] " << name << RESET << std::endl;
+}
+
+template <typename T>
+void expectEqual(const std::string& label, const T& actual, const T& expected)
+{
+    if (actual == expected)
+    {
+        ++g_passCount;
+        std::cout << GREEN << "[PASS] " << label
+                  << " | expected: " << toString(expected)
+                  << " | actual: " << toString(actual) << RESET << std::endl;
+    }
+    else
+    {
+        ++g_failCount;
+        std::cout << RED << "[FAIL] " << label
+                  << " | expected: " << toString(expected)
+                  << " | actual: " << toString(actual) << RESET << std::endl;
+    }
+}
 
 template <typename Iterator>
-void printRange(const char* label, Iterator begin, Iterator end)
+std::string rangeToString(Iterator begin, Iterator end)
 {
-    std::cout << label;
+    std::ostringstream stream;
+    bool first = true;
+
     for (Iterator it = begin; it != end; ++it)
-        std::cout << *it << ' ';
-    std::cout << std::endl;
+    {
+        if (!first)
+            stream << ' ';
+        stream << *it;
+        first = false;
+    }
+    return (stream.str());
 }
 
 void runComparisonTest()
 {
-    std::cout << "=== Subject example: MutantStack ===" << std::endl;
+    printHeader("Subject example: MutantStack and std::list output");
     MutantStack<int> mstack;
     mstack.push(5);
     mstack.push(17);
-    std::cout << "top after push(5), push(17): " << mstack.top() << std::endl;
+    expectEqual("MutantStack top after push(5), push(17)",
+                mstack.top(), 17);
     mstack.pop();
-    std::cout << "size after pop(): " << mstack.size() << std::endl;
+    expectEqual("MutantStack size after pop()", mstack.size(),
+                static_cast<std::stack<int>::size_type>(1));
     mstack.push(3);
     mstack.push(5);
     mstack.push(737);
@@ -43,20 +99,23 @@ void runComparisonTest()
     MutantStack<int>::iterator ite = mstack.end();
     ++it;
     --it;
-    printRange("iteration order (begin to end): ", it, ite);
+    std::string mutantStackOrder = rangeToString(it, ite);
+    expectEqual("MutantStack iteration order", mutantStackOrder,
+                std::string("5 3 5 737 0"));
 
     std::stack<int> stackCopy(mstack);
-    std::cout << "std::stack copy: size=" << stackCopy.size()
-              << ", top=" << stackCopy.top() << std::endl;
+    expectEqual("std::stack copy size", stackCopy.size(),
+                static_cast<std::stack<int>::size_type>(5));
+    expectEqual("std::stack copy top", stackCopy.top(), 0);
 
-    std::cout << "\n=== Same operations: std::list ===" << std::endl;
     std::list<int> values;
     values.push_back(5);
     values.push_back(17);
-    std::cout << "back after push_back(5), push_back(17): "
-              << values.back() << std::endl;
+    expectEqual("std::list back after push_back(5), push_back(17)",
+                values.back(), 17);
     values.pop_back();
-    std::cout << "size after pop_back(): " << values.size() << std::endl;
+    expectEqual("std::list size after pop_back()", values.size(),
+                static_cast<std::list<int>::size_type>(1));
     values.push_back(3);
     values.push_back(5);
     values.push_back(737);
@@ -66,24 +125,32 @@ void runComparisonTest()
     std::list<int>::iterator listEnd = values.end();
     ++listIt;
     --listIt;
-    printRange("iteration order (begin to end): ", listIt, listEnd);
+    std::string listOrder = rangeToString(listIt, listEnd);
+    expectEqual("std::list iteration order", listOrder,
+                std::string("5 3 5 737 0"));
+    expectEqual("std::list and MutantStack produce the same order",
+                listOrder, mutantStackOrder);
 
     std::list<int> listCopy(values);
-    std::cout << "std::list copy: size=" << listCopy.size()
-              << ", back=" << listCopy.back() << std::endl;
+    expectEqual("std::list copy size", listCopy.size(),
+                static_cast<std::list<int>::size_type>(5));
+    expectEqual("std::list copy back", listCopy.back(), 0);
 }
 
 void runIteratorEdgeCaseTest()
 {
-    std::cout << "\n=== Iterator edge cases ===" << std::endl;
+    printHeader("Iterator edge cases");
     MutantStack<int> values;
     const MutantStack<int>& constValues = values;
 
-    assert(values.begin() == values.end());
-    assert(values.rbegin() == values.rend());
-    assert(constValues.begin() == constValues.end());
-    assert(constValues.rbegin() == constValues.rend());
-    std::cout << "empty stack: forward and reverse ranges are empty" << std::endl;
+    expectEqual("empty mutable forward range",
+                values.begin() == values.end(), true);
+    expectEqual("empty mutable reverse range",
+                values.rbegin() == values.rend(), true);
+    expectEqual("empty const forward range",
+                constValues.begin() == constValues.end(), true);
+    expectEqual("empty const reverse range",
+                constValues.rbegin() == constValues.rend(), true);
 
     values.push(42);
     MutantStack<int>::iterator it = values.begin();
@@ -91,78 +158,99 @@ void runIteratorEdgeCaseTest()
     MutantStack<int>::reverse_iterator reverseIt = values.rbegin();
     MutantStack<int>::const_reverse_iterator constReverseIt = constValues.rbegin();
 
-    assert(*it == 42);
-    assert(*constIt == 42);
-    assert(*reverseIt == 42);
-    assert(*constReverseIt == 42);
+    expectEqual("single value through mutable iterator", *it, 42);
+    expectEqual("single value through const iterator", *constIt, 42);
+    expectEqual("single value through reverse iterator", *reverseIt, 42);
+    expectEqual("single value through const reverse iterator", *constReverseIt, 42);
     ++it;
     ++constIt;
     ++reverseIt;
     ++constReverseIt;
-    assert(it == values.end());
-    assert(constIt == constValues.end());
-    assert(reverseIt == values.rend());
-    assert(constReverseIt == constValues.rend());
-    std::cout << "single element: mutable/const forward and reverse iterators "
-              << "all visit 42 and reach their end" << std::endl;
+    expectEqual("mutable iterator advances to end", it == values.end(), true);
+    expectEqual("const iterator advances to end",
+                constIt == constValues.end(), true);
+    expectEqual("reverse iterator advances to rend",
+                reverseIt == values.rend(), true);
+    expectEqual("const reverse iterator advances to rend",
+                constReverseIt == constValues.rend(), true);
 
     values.push(84);
     values.push(126);
-    printRange("forward order: ", values.begin(), values.end());
-    printRange("reverse order: ", values.rbegin(), values.rend());
-    printRange("const forward order: ", constValues.begin(), constValues.end());
-    printRange("const reverse order: ", constValues.rbegin(), constValues.rend());
-    assert(values.begin() != values.end());
-    assert(values.rbegin() != values.rend());
+    expectEqual("forward traversal", rangeToString(values.begin(), values.end()),
+                std::string("42 84 126"));
+    expectEqual("reverse traversal", rangeToString(values.rbegin(), values.rend()),
+                std::string("126 84 42"));
+    expectEqual("const forward traversal",
+                rangeToString(constValues.begin(), constValues.end()),
+                std::string("42 84 126"));
+    expectEqual("const reverse traversal",
+                rangeToString(constValues.rbegin(), constValues.rend()),
+                std::string("126 84 42"));
 }
 
 void runStackAndCopyTest()
 {
-    std::cout << "\n=== Stack operations and copying ===" << std::endl;
+    printHeader("Stack operations and copying");
     MutantStack<int> original;
-    assert(original.empty());
+    expectEqual("new stack is empty", original.empty(), true);
     original.push(10);
     original.push(20);
     original.push(30);
-    std::cout << "after push(10), push(20), push(30): size="
-              << original.size() << ", top=" << original.top() << std::endl;
+    expectEqual("size after three pushes", original.size(),
+                static_cast<std::stack<int>::size_type>(3));
+    expectEqual("top after push(10), push(20), push(30)", original.top(), 30);
 
     MutantStack<int> constructedCopy(original);
+    expectEqual("copy-constructed contents",
+                rangeToString(constructedCopy.begin(), constructedCopy.end()),
+                std::string("10 20 30"));
+
     MutantStack<int> assignedCopy;
     assignedCopy.push(-1);
     assignedCopy = original;
+    expectEqual("copy-assigned contents",
+                rangeToString(assignedCopy.begin(), assignedCopy.end()),
+                std::string("10 20 30"));
     assignedCopy = assignedCopy;
-    printRange("copy-constructed contents: ",
-               constructedCopy.begin(), constructedCopy.end());
-    printRange("copy-assigned contents: ",
-               assignedCopy.begin(), assignedCopy.end());
+    expectEqual("contents after self-assignment",
+                rangeToString(assignedCopy.begin(), assignedCopy.end()),
+                std::string("10 20 30"));
 
     constructedCopy.pop();
     constructedCopy.push(40);
-    std::cout << "after changing copy only: original top=" << original.top()
-              << ", changed copy top=" << constructedCopy.top() << std::endl;
-    assert(original.size() == 3);
-    assert(original.top() == 30);
-    assert(constructedCopy.size() == 3);
-    assert(constructedCopy.top() == 40);
+    expectEqual("original remains unchanged after modifying copy",
+                original.top(), 30);
+    expectEqual("modified copy has new top", constructedCopy.top(), 40);
+    expectEqual("modified copy retains same size", constructedCopy.size(),
+                static_cast<std::stack<int>::size_type>(3));
 
     std::stack<int> standardCopy(original);
-    std::cout << "converted std::stack: size=" << standardCopy.size()
-              << ", top=" << standardCopy.top() << std::endl;
+    expectEqual("converted std::stack size", standardCopy.size(),
+                static_cast<std::stack<int>::size_type>(3));
+    expectEqual("converted std::stack top", standardCopy.top(), 30);
 
     while (!original.empty())
         original.pop();
-    std::cout << "after popping all original elements: empty="
-              << (original.empty() ? "true" : "false")
-              << ", size=" << original.size() << std::endl;
-    assert(original.empty());
-    assert(original.size() == 0);
+    expectEqual("stack is empty after popping all elements", original.empty(), true);
+    expectEqual("size after popping all elements", original.size(),
+                static_cast<std::stack<int>::size_type>(0));
 }
 
 int main(void)
 {
+    std::cout << BOLD << CYAN
+              << "\n================ MUTANTSTACK TESTS ================"
+              << RESET << std::endl;
+
     runComparisonTest();
     runIteratorEdgeCaseTest();
     runStackAndCopyTest();
-    return 0;
+
+    std::cout << "\n" << BOLD << CYAN
+              << "================ SUMMARY ================"
+              << RESET << std::endl;
+    std::cout << GREEN << "Passed: " << g_passCount << RESET << std::endl;
+    std::cout << RED << "Failed: " << g_failCount << RESET << std::endl;
+
+    return (g_failCount == 0 ? 0 : 1);
 }
