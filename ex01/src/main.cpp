@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Span.hpp"
+#include <climits>
 #include <sstream>
 #include <vector>
 
@@ -178,6 +179,50 @@ int main(void)
 		printSpanContent(mix);
 		expectEq("mix longest", mix.longestSpan(), 18);
 		expectEq("mix shortest", mix.shortestSpan(), 3);
+	}
+
+	printHeader("Integer limits: spans use the full unsigned range");
+	{
+		Span limits(2);
+
+		limits.addNumber(INT_MIN);
+		limits.addNumber(INT_MAX);
+		expectEq("limits longest", limits.longestSpan(), UINT_MAX);
+		expectEq("limits shortest", limits.shortestSpan(), UINT_MAX);
+	}
+
+	printHeader("Integer limits with an intermediate value");
+	{
+		Span limits(3);
+
+		limits.addNumber(INT_MIN);
+		limits.addNumber(0);
+		limits.addNumber(INT_MAX);
+		expectEq("intermediate limits longest", limits.longestSpan(), UINT_MAX);
+		expectEq("intermediate limits shortest", limits.shortestSpan(),
+				 static_cast<unsigned int>(INT_MAX));
+	}
+
+	printHeader("Integer limits with a one-unit minimum gap");
+	{
+		Span limits(3);
+
+		limits.addNumber(INT_MIN);
+		limits.addNumber(INT_MAX);
+		limits.addNumber(INT_MIN + 1);
+		expectEq("one-unit limits longest", limits.longestSpan(), UINT_MAX);
+		expectEq("one-unit limits shortest", limits.shortestSpan(), 1);
+	}
+
+	printHeader("Repeated INT_MIN: zero shortest span and full-range longest");
+	{
+		Span limits(3);
+
+		limits.addNumber(INT_MIN);
+		limits.addNumber(INT_MAX);
+		limits.addNumber(INT_MIN);
+		expectEq("repeated minimum longest", limits.longestSpan(), UINT_MAX);
+		expectEq("repeated minimum shortest", limits.shortestSpan(), 0);
 	}
 
 	printHeader("Reverse insertion order should not matter");

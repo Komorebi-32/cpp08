@@ -94,7 +94,11 @@ unsigned int Span::longestSpan()
     if (_treasureChest.size() <= 1)
         throw std::runtime_error("Span is too small");
 
-    return (*std::max_element(_treasureChest.begin(), _treasureChest.end()) - *std::min_element(_treasureChest.begin(), _treasureChest.end()));
+    int maximum = *std::max_element(_treasureChest.begin(), _treasureChest.end());
+    int minimum = *std::min_element(_treasureChest.begin(), _treasureChest.end());
+
+    return (static_cast<unsigned int>(maximum)
+            - static_cast<unsigned int>(minimum));
 }
 
 /*
@@ -114,19 +118,23 @@ unsigned int Span::shortestSpan()
 
     std::vector<int> sortedChest;
     std::vector<int>::iterator it;
-    int res;
+    unsigned int res;
+    unsigned int difference;
 
     sortedChest = this->_treasureChest;
     it = sortedChest.begin();
     std::sort(it, sortedChest.end());
 
-    res = *(it + 1) - *it;
+    res = static_cast<unsigned int>(*(it + 1))
+        - static_cast<unsigned int>(*it);
     it++;
 
     while ((it + 1) != sortedChest.end())
     {
-        if (*(it + 1) - *it < res)
-            res = *(it + 1) - *it;
+        difference = static_cast<unsigned int>(*(it + 1))
+                   - static_cast<unsigned int>(*it);
+        if (difference < res)
+            res = difference;
         it++;
     }
     return (res);
