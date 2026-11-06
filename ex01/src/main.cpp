@@ -6,7 +6,7 @@
 /*   By: komorebi <komorebi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/04/29 14:36:01 by komorebi          #+#    #+#             */
-/*   Updated: 2026/11/05 17:49:14 by komorebi         ###   ########.fr       */
+/*   Updated: 2026/11/06 11:03:43 by komorebi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,13 +206,16 @@ int main(void)
 	printHeader("addMultipleNumbers: insert at beginning");
 	{
 		Span front(8);
-		int tail[] = {20, 25};
+		std::vector<int> tail;
+		tail.push_back(20);
+		tail.push_back(25);
+
 		int head[] = {3, 7, 11};
 
 		front.addNumber(30);
 		front.addNumber(40);
 		front.addMultipleNumbers(front.begin(), head, head + 3);
-		front.addMultipleNumbers(front.begin(), tail, tail + 2);
+		front.addMultipleNumbers(front.begin(), tail.begin(), tail.end());
 		printSpanContent(front);
 		expectEq("front longest", front.longestSpan(), 37);
 		expectEq("front shortest", front.shortestSpan(), 4);
